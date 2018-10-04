@@ -40,9 +40,10 @@ public class PostalCodeServiceImpl implements PostalCodeService{
 
     @Override
     public void addPostalCode(PostalCodeDTO postalCodeDTO) {
-        log.debug("addPostalCode method start");
+        //for travis.ci closed
+        //log.debug("addPostalCode method start");
         PostalCode postalCode =  mapperFacade.map(postalCodeDTO,PostalCode.class);
-        log.debug("addPostalCode method finish");
+        //log.debug("addPostalCode method finish");
         postalCodeRepository.save(postalCode);
     }
 
