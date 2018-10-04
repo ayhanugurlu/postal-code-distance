@@ -1,7 +1,6 @@
 package com.au.ymor.listener;
 
 import com.au.ymor.service.PostalCodeService;
-import com.au.ymor.service.dto.PostalCodeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -10,10 +9,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
-
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -24,11 +21,10 @@ import java.util.stream.Stream;
 @Component
 public class ApplicationStartup implements ApplicationListener<ApplicationReadyEvent> {
 
-    @Value("${import.file.name}")
-    private String fileName;
-
     @Autowired
     PostalCodeService postalCodeService;
+    @Value("${import.file.name}")
+    private String fileName;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {

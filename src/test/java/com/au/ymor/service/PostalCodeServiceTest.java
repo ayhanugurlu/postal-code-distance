@@ -4,10 +4,10 @@ import com.au.ymor.db.model.PostalCode;
 import com.au.ymor.db.model.PostalCodeHistory;
 import com.au.ymor.db.repository.PostalCodeHistoryRepository;
 import com.au.ymor.db.repository.PostalCodeRepository;
+import com.au.ymor.service.dto.PostalCodeDTO;
 import com.au.ymor.service.dto.input.GetDistanceInput;
 import com.au.ymor.service.dto.input.PostalCodeLocationUpdateInput;
 import com.au.ymor.service.dto.output.GetDistanceOutput;
-import com.au.ymor.service.dto.PostalCodeDTO;
 import com.au.ymor.service.exception.PostalCodeNotFoundException;
 import ma.glasnost.orika.MapperFacade;
 import org.junit.Assert;
@@ -25,6 +25,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
+
 /**
  * Created by Ayhan.Ugurlu on 04/10/2018
  */
@@ -34,18 +35,13 @@ public class PostalCodeServiceTest {
 
     @Autowired
     PostalCodeService postalCodeService;
-
+    @Autowired
+    PostalCodeRepository postalCodeRepository;
+    @Autowired
+    PostalCodeHistoryRepository postalCodeHistoryRepository;
     @Qualifier("postalCodeServiceMapper")
     @Autowired
     private MapperFacade mapperFacade;
-
-    @Autowired
-    PostalCodeRepository postalCodeRepository;
-
-
-    @Autowired
-    PostalCodeHistoryRepository postalCodeHistoryRepository;
-
     @MockBean
     private Tracer tracer;
 
@@ -70,8 +66,8 @@ public class PostalCodeServiceTest {
         PostalCode postalCode = postalCodeRepository.findOne(3l);
         Assert.assertEquals(postalCodeDTO.getId(), postalCode.getId());
         Assert.assertEquals(postalCodeDTO.getPostalCode(), postalCode.getPostalCode());
-        Assert.assertEquals(postalCodeDTO.getLatitude(), postalCode.getLatitude(),0.1);
-        Assert.assertEquals(postalCodeDTO.getLongitude(), postalCode.getLongitude(),0.1);
+        Assert.assertEquals(postalCodeDTO.getLatitude(), postalCode.getLatitude(), 0.1);
+        Assert.assertEquals(postalCodeDTO.getLongitude(), postalCode.getLongitude(), 0.1);
 
     }
 
@@ -79,34 +75,34 @@ public class PostalCodeServiceTest {
     public void parseDataToPostalCodeTest() {
         PostalCodeDTO postalCodeDTO = postalCodeService.parseDataToPostalCode("14,AB30,56.84678,-2.47712");
         Assert.assertEquals(postalCodeDTO.getId(), 14);
-        Assert.assertEquals(56.84678,postalCodeDTO.getLatitude(), 0.1);
-        Assert.assertEquals(-2.47712,postalCodeDTO.getLongitude(), 0.1);
+        Assert.assertEquals(56.84678, postalCodeDTO.getLatitude(), 0.1);
+        Assert.assertEquals(-2.47712, postalCodeDTO.getLongitude(), 0.1);
         Assert.assertEquals(postalCodeDTO.getPostalCode(), "AB30");
     }
 
     @Test
     public void getGetDistanceBetweenPostalCodeTest() {
 
-        GetDistanceInput getDistanceInput = GetDistanceInput.builder().postCode1("c").postCode2("b").save(false).build();
+        GetDistanceInput getDistanceInput = GetDistanceInput.builder().postCode1("c").postCode2("b").build();
 
         try {
             GetDistanceOutput postalCodeDTO = postalCodeService.getGetDistanceBetweenPostalCode(getDistanceInput);
         } catch (PostalCodeNotFoundException e) {
             e.printStackTrace();
         }
-        getDistanceInput = GetDistanceInput.builder().postCode1("AB22").postCode2("AB23").save(false).build();
+        getDistanceInput = GetDistanceInput.builder().postCode1("AB22").postCode2("AB23").build();
         try {
             GetDistanceOutput postalCodeDTO = postalCodeService.getGetDistanceBetweenPostalCode(getDistanceInput);
-            Assert.assertEquals(postalCodeDTO.getDistance(),3.3778562717664498,0.1);
+            Assert.assertEquals(postalCodeDTO.getDistance(), 3.3778562717664498, 0.1);
         } catch (PostalCodeNotFoundException e) {
             e.printStackTrace();
         }
 
-        getDistanceInput = GetDistanceInput.builder().postCode1("AB22").postCode2("AB23").save(true).build();
+        getDistanceInput = GetDistanceInput.builder().postCode1("AB22").postCode2("AB23").build();
         try {
             GetDistanceOutput postalCodeDTO = postalCodeService.getGetDistanceBetweenPostalCode(getDistanceInput);
-            Optional<PostalCodeHistory> postalCodeHistory =  postalCodeHistoryRepository.findByPostalCode1AndPostalCode2("AB22","AB23");
-            Assert.assertEquals(postalCodeHistory.isPresent(),true);
+            Optional<PostalCodeHistory> postalCodeHistory = postalCodeHistoryRepository.findByPostalCode1AndPostalCode2("AB22", "AB23");
+            Assert.assertEquals(postalCodeHistory.isPresent(), true);
         } catch (PostalCodeNotFoundException e) {
             e.printStackTrace();
         }
@@ -121,7 +117,7 @@ public class PostalCodeServiceTest {
         try {
             postalCodeService.updatePostalCode(postalCodeZ);
             PostalCode postalCode = postalCodeRepository.findOne(4l);
-            Assert.assertEquals(postalCode.getLatitude(),postalCodeZ.getLatitude(),0.1);
+            Assert.assertEquals(postalCode.getLatitude(), postalCodeZ.getLatitude(), 0.1);
         } catch (PostalCodeNotFoundException e) {
             e.printStackTrace();
         }

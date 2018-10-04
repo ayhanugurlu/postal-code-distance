@@ -1,6 +1,5 @@
 package com.au.ymor.rest;
 
-import java.net.URI;
 import org.apache.http.HttpHost;
 import org.apache.http.client.AuthCache;
 import org.apache.http.client.protocol.HttpClientContext;
@@ -10,6 +9,8 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+
+import java.net.URI;
 
 /**
  * Created by Ayhan.Ugurlu on 04/10/2018

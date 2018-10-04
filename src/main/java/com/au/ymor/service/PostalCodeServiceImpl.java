@@ -1,7 +1,6 @@
 package com.au.ymor.service;
 
 import com.au.ymor.db.model.PostalCode;
-import com.au.ymor.db.model.PostalCodeHistory;
 import com.au.ymor.db.repository.PostalCodeHistoryRepository;
 import com.au.ymor.db.repository.PostalCodeRepository;
 import com.au.ymor.service.dto.PostalCodeDTO;
@@ -24,7 +23,7 @@ import java.util.Optional;
  */
 @Service
 @Slf4j
-public class PostalCodeServiceImpl implements PostalCodeService{
+public class PostalCodeServiceImpl implements PostalCodeService {
 
     @Autowired
     PostalCodeRepository postalCodeRepository;
@@ -47,57 +46,46 @@ public class PostalCodeServiceImpl implements PostalCodeService{
     public void addPostalCode(PostalCodeDTO postalCodeDTO) {
         //for travis.ci closed
         //log.debug("addPostalCode method start");
-        PostalCode postalCode =  mapperFacade.map(postalCodeDTO,PostalCode.class);
+        PostalCode postalCode = mapperFacade.map(postalCodeDTO, PostalCode.class);
         //log.debug("addPostalCode method finish");
         postalCodeRepository.save(postalCode);
     }
 
     @Override
     public GetDistanceOutput getGetDistanceBetweenPostalCode(GetDistanceInput getDistanceInput) throws PostalCodeNotFoundException {
-        log.debug("getGetDistanceBetweenPostalCode method start {}",tracer.getCurrentSpan().getTraceId());
-        Optional<PostalCode> postalCode1 =  postalCodeRepository.findByPostalCode(getDistanceInput.getPostCode1());
+        log.debug("getGetDistanceBetweenPostalCode method start {}", tracer.getCurrentSpan().getTraceId());
+        Optional<PostalCode> postalCode1 = postalCodeRepository.findByPostalCode(getDistanceInput.getPostCode1());
         PostalCode postalCodeValue1 = postalCode1.orElseThrow(() -> new PostalCodeNotFoundException());
-        Optional<PostalCode> postalCode2 =  postalCodeRepository.findByPostalCode(getDistanceInput.getPostCode2());
+        Optional<PostalCode> postalCode2 = postalCodeRepository.findByPostalCode(getDistanceInput.getPostCode2());
         PostalCode postalCodeValue2 = postalCode2.orElseThrow(() -> new PostalCodeNotFoundException());
 
-        Double distance = distanceService.calculateDistance(postalCodeValue1.getLatitude(),postalCodeValue1.getLongitude(),postalCodeValue2.getLatitude(),postalCodeValue2.getLongitude());
-        PostalCodeOutput postalCodeOutput1 =  mapperFacade.map(postalCodeValue1,PostalCodeOutput.class);
-        PostalCodeOutput postalCodeOutput2 =  mapperFacade.map(postalCodeValue2,PostalCodeOutput.class);
+        Double distance = distanceService.calculateDistance(postalCodeValue1.getLatitude(), postalCodeValue1.getLongitude(), postalCodeValue2.getLatitude(), postalCodeValue2.getLongitude());
+        PostalCodeOutput postalCodeOutput1 = mapperFacade.map(postalCodeValue1, PostalCodeOutput.class);
+        PostalCodeOutput postalCodeOutput2 = mapperFacade.map(postalCodeValue2, PostalCodeOutput.class);
         GetDistanceOutput getDistanceOutput = new GetDistanceOutput();
         getDistanceOutput.setPostalCodeOutput1(postalCodeOutput1);
         getDistanceOutput.setPostalCodeOutput2(postalCodeOutput2);
         getDistanceOutput.setDistance(distance);
-        if(getDistanceInput.isSave()){
-            Optional<PostalCodeHistory> postalCodeHistory = postalCodeHistoryRepository.findByPostalCode1AndPostalCode2(getDistanceOutput.getPostalCodeOutput1().getPostalCode(), getDistanceOutput.getPostalCodeOutput2().getPostalCode());
-            if (!postalCodeHistory.isPresent()) {
-                PostalCodeHistory newPostalCodeHistory = PostalCodeHistory.builder().postalCode1(getDistanceOutput.getPostalCodeOutput1().
-                        getPostalCode()).postalCode2(getDistanceOutput.getPostalCodeOutput2().getPostalCode()).
-                        distance(getDistanceOutput.getDistance()).build();
-                postalCodeHistoryRepository.save(newPostalCodeHistory);
-            }
 
-
-        }
-        log.debug("getGetDistanceBetweenPostalCode method finish {}",tracer.getCurrentSpan().getTraceId());
+        log.debug("getGetDistanceBetweenPostalCode method finish {}", tracer.getCurrentSpan().getTraceId());
         return getDistanceOutput;
     }
 
 
     @Override
     public void updatePostalCode(PostalCodeLocationUpdateInput postalCodeLocationUpdateInput) throws PostalCodeNotFoundException {
-        log.debug("updatePostalCode method start {}",tracer.getCurrentSpan().getTraceId());
-        Optional<PostalCode> postalCode =  postalCodeRepository.findByPostalCode(postalCodeLocationUpdateInput.getPostalCode());
+        log.debug("updatePostalCode method start {}", tracer.getCurrentSpan().getTraceId());
+        Optional<PostalCode> postalCode = postalCodeRepository.findByPostalCode(postalCodeLocationUpdateInput.getPostalCode());
         PostalCode postalCodeValue = postalCode.orElseThrow(() -> new PostalCodeNotFoundException());
         postalCodeValue.setLatitude(postalCodeLocationUpdateInput.getLatitude());
         postalCodeValue.setLongitude(postalCodeLocationUpdateInput.getLongitude());
-        log.debug("updatePostalCode method finish {}",tracer.getCurrentSpan().getTraceId());
+        log.debug("updatePostalCode method finish {}", tracer.getCurrentSpan().getTraceId());
         postalCodeRepository.save(postalCodeValue);
 
     }
 
 
     /**
-     *
      * @param line
      * @return
      */
@@ -113,13 +101,12 @@ public class PostalCodeServiceImpl implements PostalCodeService{
             postalCodeDTO.setLatitude(Double.parseDouble(datas[2]));
             postalCodeDTO.setLongitude(Double.parseDouble(datas[3]));
 
-        }catch (Exception e){
+        } catch (Exception e) {
             postalCodeDTO = null;
         }
         log.debug("parseDataToPostalCode method finish ");
         return postalCodeDTO;
     }
-
 
 
 }

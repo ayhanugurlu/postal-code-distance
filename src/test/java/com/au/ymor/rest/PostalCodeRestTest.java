@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.http.client.support.BasicAuthorizationInterceptor;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -35,7 +34,7 @@ public class PostalCodeRestTest {
     public void restTest() {
 
         HttpHost host = new HttpHost("localhost", port, "http");
-        RestTemplate  restTemplate = new RestTemplate(
+        RestTemplate restTemplate = new RestTemplate(
                 new HttpComponentsClientHttpRequestFactoryBasicAuth(host));
 
         restTemplate.getInterceptors().add(new BasicAuthorizationInterceptor("admin", "admin"));
@@ -43,19 +42,18 @@ public class PostalCodeRestTest {
         HttpEntity<GetDistanceRequest> getDistanceRequestHttpEntity = new HttpEntity<>(getDistanceRequest, headers);
         ResponseEntity<GetDistanceResponse> getDistanceResponseEntity = restTemplate.exchange(createURLWithPort("/getPostalCodeDistance"), HttpMethod.POST, getDistanceRequestHttpEntity, GetDistanceResponse.class);
         Assert.assertEquals(getDistanceResponseEntity.getStatusCode(), HttpStatus.OK);
-        Assert.assertEquals(getDistanceResponseEntity.getBody().getDistance(), 249.2681369479609,0.1);
-
+        Assert.assertEquals(getDistanceResponseEntity.getBody().getDistance(), 249.2681369479609, 0.1);
 
 
         PostalCodeLocationUpdateRequest postalCodeLocationUpdateRequest = PostalCodeLocationUpdateRequest.builder().postalCode("AB99").latitude(1).longitude(1).build();
         HttpEntity<PostalCodeLocationUpdateRequest> getDistanceRequestHttpEntityHttpEntity = new HttpEntity<>(postalCodeLocationUpdateRequest, headers);
-        restTemplate.exchange(createURLWithPort("/updatePostalCodeLocation"), HttpMethod.POST, getDistanceRequestHttpEntityHttpEntity,String.class);
+        restTemplate.exchange(createURLWithPort("/updatePostalCodeLocation"), HttpMethod.POST, getDistanceRequestHttpEntityHttpEntity, String.class);
         Assert.assertEquals(getDistanceResponseEntity.getStatusCode(), HttpStatus.OK);
 
     }
 
     private String createURLWithPort(String uri) {
-        return "http://localhost:" + port+"/api/v1" + uri;
+        return "http://localhost:" + port + "/api/v1" + uri;
     }
 
 }

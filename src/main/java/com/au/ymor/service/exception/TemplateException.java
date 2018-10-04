@@ -5,16 +5,19 @@ import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
+ * Template exeption
+ * <p>
  * Created by Ayhan.Ugurlu on 04/10/2018
  */
 public abstract class TemplateException extends Exception {
 
-    TemplateException(String errorMessage){
+    protected List<String> errors = new ArrayList<>();
+
+    TemplateException(String errorMessage) {
         super(errorMessage);
     }
-
-    protected List<String> errors = new ArrayList<>();
 
     public abstract String getErrorCode();
 

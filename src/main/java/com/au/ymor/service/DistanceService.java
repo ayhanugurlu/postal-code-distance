@@ -17,6 +17,12 @@ public interface DistanceService {
     double calculateDistance(double latitude, double longitude,
                              double latitude2, double longitude2);
 
-
+    /**
+     * Cobvert lot lon to degree
+     *
+     * @param latitude
+     * @param longitude
+     * @return
+     */
     String getFormattedLocationInDegree(double latitude, double longitude);
 }

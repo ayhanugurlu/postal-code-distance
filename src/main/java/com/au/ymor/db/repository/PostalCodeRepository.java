@@ -8,7 +8,7 @@ import java.util.Optional;
 /**
  * Created by Ayhan.Ugurlu on 04/10/2018
  */
-public interface PostalCodeRepository  extends CrudRepository<PostalCode,Long> {
+public interface PostalCodeRepository extends CrudRepository<PostalCode, Long> {
 
     Optional<PostalCode> findByPostalCode(String postalCode);
 }

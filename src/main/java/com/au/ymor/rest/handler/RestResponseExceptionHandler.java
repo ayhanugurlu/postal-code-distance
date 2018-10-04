@@ -5,7 +5,6 @@ package com.au.ymor.rest.handler;
  */
 
 
-
 import com.au.ymor.service.exception.PostalCodeNotFoundException;
 import com.au.ymor.service.exception.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.stream.Collectors;
 
 /**
  * Created by ayhanugurlu on 5/26/18.

@@ -25,6 +25,5 @@ public class PostalCodeHistory {
 
     private String postalCode2;
 
-    private double distance;
 
 }
