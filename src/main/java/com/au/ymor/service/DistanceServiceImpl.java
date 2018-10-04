@@ -1,6 +1,5 @@
 package com.au.ymor.service;
 
-import com.au.ymor.service.util.Deg2UTM;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.sleuth.Tracer;
