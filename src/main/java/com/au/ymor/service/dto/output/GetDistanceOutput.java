@@ -19,4 +19,6 @@ public class GetDistanceOutput {
     private PostalCodeOutput postalCodeOutput2;
 
     private double distance;
+
+    private String unit = "km";
 }

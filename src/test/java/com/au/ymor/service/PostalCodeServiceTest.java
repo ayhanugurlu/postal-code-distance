@@ -1,6 +1,8 @@
 package com.au.ymor.service;
 
 import com.au.ymor.db.model.PostalCode;
+import com.au.ymor.db.model.PostalCodeHistory;
+import com.au.ymor.db.repository.PostalCodeHistoryRepository;
 import com.au.ymor.db.repository.PostalCodeRepository;
 import com.au.ymor.service.dto.input.GetDistanceInput;
 import com.au.ymor.service.dto.input.PostalCodeLocationUpdateInput;
@@ -20,6 +22,8 @@ import org.springframework.cloud.sleuth.Span;
 import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Optional;
+
 import static org.mockito.Mockito.when;
 /**
  * Created by Ayhan.Ugurlu on 04/10/2018
@@ -37,6 +41,10 @@ public class PostalCodeServiceTest {
 
     @Autowired
     PostalCodeRepository postalCodeRepository;
+
+
+    @Autowired
+    PostalCodeHistoryRepository postalCodeHistoryRepository;
 
     @MockBean
     private Tracer tracer;
@@ -79,19 +87,30 @@ public class PostalCodeServiceTest {
     @Test
     public void getGetDistanceBetweenPostalCodeTest() {
 
-        GetDistanceInput getDistanceInput = GetDistanceInput.builder().postCode1("c").postCode2("b").build();
+        GetDistanceInput getDistanceInput = GetDistanceInput.builder().postCode1("c").postCode2("b").save(false).build();
 
         try {
             GetDistanceOutput postalCodeDTO = postalCodeService.getGetDistanceBetweenPostalCode(getDistanceInput);
         } catch (PostalCodeNotFoundException e) {
             e.printStackTrace();
         }
-        getDistanceInput = GetDistanceInput.builder().postCode1("a").postCode2("b").build();
+        getDistanceInput = GetDistanceInput.builder().postCode1("AB22").postCode2("AB23").save(false).build();
         try {
             GetDistanceOutput postalCodeDTO = postalCodeService.getGetDistanceBetweenPostalCode(getDistanceInput);
+            Assert.assertEquals(postalCodeDTO.getDistance(),3.3778562717664498,0.1);
         } catch (PostalCodeNotFoundException e) {
             e.printStackTrace();
         }
+
+        getDistanceInput = GetDistanceInput.builder().postCode1("AB22").postCode2("AB23").save(true).build();
+        try {
+            GetDistanceOutput postalCodeDTO = postalCodeService.getGetDistanceBetweenPostalCode(getDistanceInput);
+            Optional<PostalCodeHistory> postalCodeHistory =  postalCodeHistoryRepository.findByPostalCode1AndPostalCode2("AB22","AB23");
+            Assert.assertEquals(postalCodeHistory.isPresent(),true);
+        } catch (PostalCodeNotFoundException e) {
+            e.printStackTrace();
+        }
+
 
     }
 

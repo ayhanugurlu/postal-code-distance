@@ -15,4 +15,6 @@ public class GetDistanceResponse {
     private PostalCodeResponse postalCodeOutput2;
 
     private double distance;
+
+    private String unit;
 }

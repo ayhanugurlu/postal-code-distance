@@ -1,5 +1,6 @@
 package com.au.ymor.rest.request;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.*;
 
 /**
@@ -13,4 +14,5 @@ public class GetDistanceRequest {
 
     private String postCode1;
     private String postCode2;
+    private boolean save;
 }

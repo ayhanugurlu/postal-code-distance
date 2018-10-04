@@ -1,11 +1,13 @@
 package com.au.ymor.service;
 
 import com.au.ymor.db.model.PostalCode;
+import com.au.ymor.db.model.PostalCodeHistory;
+import com.au.ymor.db.repository.PostalCodeHistoryRepository;
 import com.au.ymor.db.repository.PostalCodeRepository;
+import com.au.ymor.service.dto.PostalCodeDTO;
 import com.au.ymor.service.dto.input.GetDistanceInput;
 import com.au.ymor.service.dto.input.PostalCodeLocationUpdateInput;
 import com.au.ymor.service.dto.output.GetDistanceOutput;
-import com.au.ymor.service.dto.PostalCodeDTO;
 import com.au.ymor.service.dto.output.PostalCodeOutput;
 import com.au.ymor.service.exception.PostalCodeNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,9 @@ public class PostalCodeServiceImpl implements PostalCodeService{
 
     @Autowired
     PostalCodeRepository postalCodeRepository;
+
+    @Autowired
+    PostalCodeHistoryRepository postalCodeHistoryRepository;
 
     @Autowired
     DistanceService distanceService;
@@ -62,6 +67,17 @@ public class PostalCodeServiceImpl implements PostalCodeService{
         getDistanceOutput.setPostalCodeOutput1(postalCodeOutput1);
         getDistanceOutput.setPostalCodeOutput2(postalCodeOutput2);
         getDistanceOutput.setDistance(distance);
+        if(getDistanceInput.isSave()){
+            Optional<PostalCodeHistory> postalCodeHistory = postalCodeHistoryRepository.findByPostalCode1AndPostalCode2(getDistanceOutput.getPostalCodeOutput1().getPostalCode(), getDistanceOutput.getPostalCodeOutput2().getPostalCode());
+            if (!postalCodeHistory.isPresent()) {
+                PostalCodeHistory newPostalCodeHistory = PostalCodeHistory.builder().postalCode1(getDistanceOutput.getPostalCodeOutput1().
+                        getPostalCode()).postalCode2(getDistanceOutput.getPostalCodeOutput2().getPostalCode()).
+                        distance(getDistanceOutput.getDistance()).build();
+                postalCodeHistoryRepository.save(newPostalCodeHistory);
+            }
+
+
+        }
         log.debug("getGetDistanceBetweenPostalCode method finish {}",tracer.getCurrentSpan().getTraceId());
         return getDistanceOutput;
     }
@@ -80,6 +96,11 @@ public class PostalCodeServiceImpl implements PostalCodeService{
     }
 
 
+    /**
+     *
+     * @param line
+     * @return
+     */
     @Override
     public PostalCodeDTO parseDataToPostalCode(String line) {
         log.debug("parseDataToPostalCode method start ");

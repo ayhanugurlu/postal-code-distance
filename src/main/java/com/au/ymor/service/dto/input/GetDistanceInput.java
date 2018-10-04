@@ -14,4 +14,5 @@ public class GetDistanceInput {
 
     private String postCode1;
     private String postCode2;
+    private boolean save;
 }

@@ -3,4 +3,4 @@
 
 [![codecov.io](https://codecov.io/github/ayhanugurlu/postal-code-distance/coverage.svg?branch=master)](https://codecov.io/github/cainus/codecov.io?branch=master)
 
-![BCH compliance](https://bettercodehub.com/edge/badge/ayhanugurlu/spostal-code-distance?branch=master)
+![BCH compliance](https://bettercodehub.com/edge/badge/ayhanugurlu/postal-code-distance?branch=master)
