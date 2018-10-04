@@ -41,7 +41,6 @@ public class PostalCodeServiceImpl implements PostalCodeService{
     @Override
     public void addPostalCode(PostalCodeDTO postalCodeDTO) {
         log.debug("addPostalCode method start");
-        log.debug("postal code:" + postalCodeDTO.getPostalCode()+" postal code lat:" + postalCodeDTO.getLatitude()+" postal code lon:"+postalCodeDTO.getLongitude());
         PostalCode postalCode =  mapperFacade.map(postalCodeDTO,PostalCode.class);
         log.debug("addPostalCode method finish");
         postalCodeRepository.save(postalCode);
