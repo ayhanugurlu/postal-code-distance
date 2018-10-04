@@ -3,6 +3,7 @@ package com.au.ymor.db.repository;
 import com.au.ymor.db.model.PostalCodeHistory;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -10,5 +11,5 @@ import java.util.Optional;
  */
 public interface PostalCodeHistoryRepository extends CrudRepository<PostalCodeHistory, Long> {
 
-    Optional<PostalCodeHistory> findByPostalCode1AndPostalCode2(String postalCode1, String postalCode2);
+    List<PostalCodeHistory> findByPostalCode1AndPostalCode2(String postalCode1, String postalCode2);
 }

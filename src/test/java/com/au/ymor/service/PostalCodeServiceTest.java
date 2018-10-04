@@ -22,6 +22,7 @@ import org.springframework.cloud.sleuth.Span;
 import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
@@ -101,8 +102,8 @@ public class PostalCodeServiceTest {
         getDistanceInput = GetDistanceInput.builder().postCode1("AB22").postCode2("AB23").build();
         try {
             GetDistanceOutput postalCodeDTO = postalCodeService.getGetDistanceBetweenPostalCode(getDistanceInput);
-            Optional<PostalCodeHistory> postalCodeHistory = postalCodeHistoryRepository.findByPostalCode1AndPostalCode2("AB22", "AB23");
-            Assert.assertEquals(postalCodeHistory.isPresent(), true);
+            List<PostalCodeHistory> postalCodeHistories = postalCodeHistoryRepository.findByPostalCode1AndPostalCode2("AB22", "AB23");
+            Assert.assertEquals(postalCodeHistories.size() , 2);
         } catch (PostalCodeNotFoundException e) {
             e.printStackTrace();
         }
