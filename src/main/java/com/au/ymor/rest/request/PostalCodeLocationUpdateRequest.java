@@ -1,19 +1,18 @@
-package com.au.ymor.service.dto;
+package com.au.ymor.rest.request;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  * Created by Ayhan.Ugurlu on 04/10/2018
  */
-
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostalCodeOutput {
+@Builder
+public class PostalCodeLocationUpdateRequest {
 
     private String postalCode;
 
@@ -21,5 +20,4 @@ public class PostalCodeOutput {
 
     private double longitude;
 
-    private String degree;
 }

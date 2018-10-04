@@ -1,4 +1,4 @@
-package com.au.ymor.service.dto;
+package com.au.ymor.service.dto.output;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

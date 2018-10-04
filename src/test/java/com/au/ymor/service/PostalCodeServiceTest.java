@@ -2,8 +2,9 @@ package com.au.ymor.service;
 
 import com.au.ymor.db.model.PostalCode;
 import com.au.ymor.db.repository.PostalCodeRepository;
-import com.au.ymor.service.dto.GetDistanceInput;
-import com.au.ymor.service.dto.GetDistanceOutput;
+import com.au.ymor.service.dto.input.GetDistanceInput;
+import com.au.ymor.service.dto.input.PostalCodeLocationUpdateInput;
+import com.au.ymor.service.dto.output.GetDistanceOutput;
 import com.au.ymor.service.dto.PostalCodeDTO;
 import com.au.ymor.service.exception.PostalCodeNotFoundException;
 import ma.glasnost.orika.MapperFacade;
@@ -19,6 +20,7 @@ import org.springframework.cloud.sleuth.Span;
 import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static org.mockito.Mockito.when;
 /**
  * Created by Ayhan.Ugurlu on 04/10/2018
  */
@@ -45,7 +47,8 @@ public class PostalCodeServiceTest {
 
     @Before
     public void setUp() throws Exception {
-
+        when(span.getTraceId()).thenReturn(1l);
+        when(tracer.getCurrentSpan()).thenReturn(span);
         PostalCode postalCodeA = PostalCode.builder().postalCode("b").latitude(2).longitude(2).id(4).build();
         postalCodeRepository.save(postalCodeA);
         PostalCode postalCodeZ = PostalCode.builder().postalCode("z").latitude(2).longitude(2).id(4).build();
@@ -95,7 +98,7 @@ public class PostalCodeServiceTest {
 
     @Test
     public void updatePostalCodeTest() {
-        PostalCodeDTO postalCodeZ = PostalCodeDTO.builder().postalCode("z").latitude(4).longitude(2).id(4).build();
+        PostalCodeLocationUpdateInput postalCodeZ = PostalCodeLocationUpdateInput.builder().postalCode("z").latitude(4).longitude(2).build();
         try {
             postalCodeService.updatePostalCode(postalCodeZ);
             PostalCode postalCode = postalCodeRepository.findOne(4l);
@@ -103,7 +106,7 @@ public class PostalCodeServiceTest {
         } catch (PostalCodeNotFoundException e) {
             e.printStackTrace();
         }
-        postalCodeZ = PostalCodeDTO.builder().postalCode("k").latitude(4).longitude(2).id(4).build();
+        postalCodeZ = PostalCodeLocationUpdateInput.builder().postalCode("k").latitude(4).longitude(2).build();
         try {
             postalCodeService.updatePostalCode(postalCodeZ);
         } catch (PostalCodeNotFoundException e) {

@@ -1,11 +1,13 @@
 package com.au.ymor.rest.mapper;
 
 import com.au.ymor.rest.request.GetDistanceRequest;
+import com.au.ymor.rest.request.PostalCodeLocationUpdateRequest;
 import com.au.ymor.rest.response.GetDistanceResponse;
 import com.au.ymor.rest.response.PostalCodeResponse;
-import com.au.ymor.service.dto.GetDistanceInput;
-import com.au.ymor.service.dto.GetDistanceOutput;
-import com.au.ymor.service.dto.PostalCodeOutput;
+import com.au.ymor.service.dto.input.GetDistanceInput;
+import com.au.ymor.service.dto.input.PostalCodeLocationUpdateInput;
+import com.au.ymor.service.dto.output.GetDistanceOutput;
+import com.au.ymor.service.dto.output.PostalCodeOutput;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.ConfigurableMapper;
 import org.springframework.stereotype.Component;
@@ -26,6 +28,10 @@ public class PostalCodeRestMapper extends ConfigurableMapper {
                 .register();
 
         factory.classMap(PostalCodeOutput.class, PostalCodeResponse.class)
+                .byDefault()
+                .register();
+
+        factory.classMap(PostalCodeLocationUpdateRequest.class, PostalCodeLocationUpdateInput.class)
                 .byDefault()
                 .register();
     }

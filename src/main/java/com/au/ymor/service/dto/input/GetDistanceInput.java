@@ -1,4 +1,4 @@
-package com.au.ymor.service.dto;
+package com.au.ymor.service.dto.input;
 
 import lombok.*;
 

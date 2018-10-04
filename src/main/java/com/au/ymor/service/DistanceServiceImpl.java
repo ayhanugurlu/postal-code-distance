@@ -2,6 +2,8 @@ package com.au.ymor.service;
 
 import com.au.ymor.service.util.Deg2UTM;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,10 +13,14 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class DistanceServiceImpl implements DistanceService {
 
+    @Autowired
+    private Tracer tracer;
+
     private final static double EARTH_RADIUS = 6371; // radius in kilometers
 
     public double calculateDistance(double latitude, double longitude,
                                      double latitude2, double longitude2) {
+        log.debug("calculateDistance method start {}",tracer.getCurrentSpan().getTraceId());
         // Using Haversine formula. See Wikipedia.
         double lon1Radians = Math.toRadians(longitude);
         double lon2Radians = Math.toRadians(longitude2);
@@ -24,6 +30,7 @@ public class DistanceServiceImpl implements DistanceService {
                 + Math.cos(lat1Radians) * Math.cos(lat2Radians) *
                 haversine(lon1Radians, lon2Radians);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        log.debug("calculateDistance method start {}",tracer.getCurrentSpan().getTraceId());
         return (EARTH_RADIUS * c);
     }
 
@@ -36,6 +43,7 @@ public class DistanceServiceImpl implements DistanceService {
     }
 
     public String getFormattedLocationInDegree(double latitude, double longitude) {
+        log.debug("getFormattedLocationInDegree method start {}",tracer.getCurrentSpan().getTraceId());
         try {
             int latSeconds = (int) Math.round(latitude * 3600);
             int latDegrees = latSeconds / 3600;
@@ -50,11 +58,12 @@ public class DistanceServiceImpl implements DistanceService {
             longSeconds %= 60;
             String latDegree = latDegrees >= 0 ? "N" : "S";
             String lonDegrees = longDegrees >= 0 ? "E" : "W";
-
+            log.debug("getFormattedLocationInDegree method finish {}",tracer.getCurrentSpan().getTraceId());
             return  Math.abs(latDegrees) + "°" + latMinutes + "'" + latSeconds
                     + "\"" + latDegree +" "+ Math.abs(longDegrees) + "°" + longMinutes
                     + "'" + longSeconds + "\"" + lonDegrees;
         } catch (Exception e) {
+            log.debug("getFormattedLocationInDegree method finish {}",tracer.getCurrentSpan().getTraceId());
             return ""+ String.format("%8.5f", latitude) + "  "
                     + String.format("%8.5f", longitude) ;
         }

@@ -1,7 +1,8 @@
 package com.au.ymor.service;
 
-import com.au.ymor.service.dto.GetDistanceInput;
-import com.au.ymor.service.dto.GetDistanceOutput;
+import com.au.ymor.service.dto.input.GetDistanceInput;
+import com.au.ymor.service.dto.input.PostalCodeLocationUpdateInput;
+import com.au.ymor.service.dto.output.GetDistanceOutput;
 import com.au.ymor.service.dto.PostalCodeDTO;
 import com.au.ymor.service.exception.PostalCodeNotFoundException;
 
@@ -16,5 +17,5 @@ public interface PostalCodeService {
 
     PostalCodeDTO parseDataToPostalCode(String line);
 
-    void updatePostalCode(PostalCodeDTO postalCodeDTO) throws PostalCodeNotFoundException;
+    void updatePostalCode(PostalCodeLocationUpdateInput postalCodeLocationUpdateInput) throws PostalCodeNotFoundException;
 }

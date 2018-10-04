@@ -22,6 +22,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+
+        <ma.glasnost.orika>1.5.1</ma.glasnost.orika>
+        <org.projectlombok>1.18.2</org.projectlombok>
+        <spring-cloud-sleuth-core>1.3.3.RELEASE</spring-cloud-sleuth-core>
+        <springfox-swagger2>2.8.0</springfox-swagger2>
     </properties>
 
     <dependencies>
@@ -36,12 +41,19 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>1.5.9.RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+
 
         <!-- https://mvnrepository.com/artifact/ma.glasnost.orika/orika-core -->
         <dependency>
             <groupId>ma.glasnost.orika</groupId>
             <artifactId>orika-core</artifactId>
-            <version>1.5.1</version>
+            <version>${ma.glasnost.orika}</version>
         </dependency>
 
 
@@ -49,7 +61,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.2</version>
+            <version>${org.projectlombok}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -58,21 +70,21 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-sleuth-core</artifactId>
-            <version>1.3.3.RELEASE</version>
+            <version>${spring-cloud-sleuth-core}</version>
         </dependency>
 
         <!--Swagger -->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
-            <version>2.8.0</version>
+            <version>${springfox-swagger2}</version>
         </dependency>
 
 
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.8.0</version>
+            <version>${springfox-swagger2}</version>
         </dependency>
 
 
@@ -87,6 +99,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -94,6 +107,32 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.9</version>
+                <configuration>
+                    <excludes>
+
+                        <exclude>**/web/vaadin/*</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
